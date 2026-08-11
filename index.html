@@ -96,10 +96,12 @@ body.editing .check-del{display:block}
 /* ── MANAGE ── */
 .manage-row{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 2px}
 .manage-btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 10px;font-size:12px;font-weight:850;cursor:pointer}
-.item-move-row{display:none;gap:6px;margin-top:8px}
-body.editing .item-move-row{display:flex}
-.item-move-btn{border:1px solid var(--line);background:#fff;border-radius:10px;width:34px;height:30px;font-size:14px;font-weight:900;cursor:pointer;color:var(--accent)}
-.item-move-btn:disabled{opacity:.3;cursor:default}
+.reorder-list{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto}
+.reorder-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+.reorder-row .reorder-label{flex:1;font-size:13px;font-weight:750;line-height:1.4}
+.reorder-row .reorder-btns{display:flex;gap:6px;flex-shrink:0}
+.reorder-btn{border:1px solid var(--line);background:var(--bg);border-radius:10px;width:34px;height:34px;font-size:15px;font-weight:900;cursor:pointer;color:var(--accent)}
+.reorder-btn:disabled{opacity:.3;cursor:default}
 .manage-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .manage-btn.danger{color:var(--danger);background:#fff4f1;border-color:#f5d0cc}
 
@@ -260,9 +262,33 @@ padding:4px 10px;border-radius:999px;margin:0 auto 10px;text-align:center}
               <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
             </div>
             <div class="item" data-spot>
-              <span class="time" data-editable>約 16:45–20:00</span><b data-editable>🛍️ 札幌購物（約 3–4 小時）</b><p data-editable>① 2nd STREET：二手服飾、精品等　② 大黑屋（Daikokuya）：二手精品、名牌　③ BOOK OFF：二手書籍、精品／雜貨等，可依時間選擇　④ 藥妝店：集中購買藥妝、日用品。<br>👉 建議優先逛二手店，再買藥妝；若時間不足，BOOK OFF 可最後再決定是否去。</p>
+              <span class="time" data-editable>約 16:45</span><b data-editable>大黑屋（Daikokuya）</b><p data-editable>二手精品、名牌，優先逛的第一站。</p>
               <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
-              <div class="item-nav-row"><a class="item-nav" href="https://maps.google.com/?q=Daikokuya+Sapporo" target="_blank">📍 大黑屋</a><button class="item-nav item-nav-edit manage-btn" onclick="editNavBtn(this.previousElementSibling)">🔗 改連結</button></div>
+              <div class="item-nav-row"><a class="item-nav" href="https://maps.app.goo.gl/46afr5UnxBq5PQEr7?g_st=ic" target="_blank">📍 導航</a><button class="item-nav item-nav-edit manage-btn" onclick="editNavBtn(this.previousElementSibling)">🔗 改連結</button></div>
+            </div>
+            <div class="item" data-spot>
+              <b data-editable>2nd STREET 狸小路店</b><p data-editable>二手服飾、精品等。</p>
+              <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
+              <div class="item-nav-row"><a class="item-nav" href="https://maps.google.com/?q=2nd+STREET+狸小路店+札幌" target="_blank">📍 導航</a><button class="item-nav item-nav-edit manage-btn" onclick="editNavBtn(this.previousElementSibling)">🔗 改連結</button></div>
+            </div>
+            <div class="item" data-spot>
+              <b data-editable>2nd STREET 南2條店</b><p data-editable>二手服飾、精品等。</p>
+              <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
+              <div class="item-nav-row"><a class="item-nav" href="https://maps.google.com/?q=2nd+STREET+南2條店+札幌" target="_blank">📍 導航</a><button class="item-nav item-nav-edit manage-btn" onclick="editNavBtn(this.previousElementSibling)">🔗 改連結</button></div>
+            </div>
+            <div class="item" data-spot>
+              <b data-editable>2nd STREET 3丁目店</b><p data-editable>二手服飾、精品等，可依時間選擇要不要三間都逛。</p>
+              <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
+              <div class="item-nav-row"><a class="item-nav" href="https://maps.google.com/?q=2nd+STREET+3丁目店+札幌" target="_blank">📍 導航</a><button class="item-nav item-nav-edit manage-btn" onclick="editNavBtn(this.previousElementSibling)">🔗 改連結</button></div>
+            </div>
+            <div class="item" data-spot>
+              <b data-editable>BOOKOFF 札幌南2條店</b><p data-editable>二手書籍、精品／雜貨等，視剩餘時間決定要不要去。</p>
+              <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
+              <div class="item-nav-row"><a class="item-nav" href="https://maps.google.com/?q=BOOKOFF+札幌南2條店" target="_blank">📍 導航</a><button class="item-nav item-nav-edit manage-btn" onclick="editNavBtn(this.previousElementSibling)">🔗 改連結</button></div>
+            </div>
+            <div class="item" data-spot>
+              <span class="time" data-editable>約 20:00 前</span><b data-editable>藥妝店</b><p data-editable>集中購買藥妝、日用品，購物行程最後一站。</p>
+              <div class="spot-photo-wrap" onclick="handlePhotoClick(this)"><div class="spot-photo-placeholder"><span>📷</span>點此加入景點照片</div><button class="photo-overlay-btn" type="button">更換照片</button></div>
             </div>
             <div class="item" data-spot>
               <span class="time" data-editable>約 20:00</span><b data-editable>離開札幌前往旭川</b><p data-editable>車程約 2 小時。購物途中可簡單用餐。</p>
@@ -865,46 +891,48 @@ function bindAddFieldBtns(){
   })
 }
 
-/* ────────── Reorder items within a day ────────── */
-function ensureMoveButtons(){
-  root.querySelectorAll('.timeline').forEach(tl=>{
-    [...tl.children].forEach(item=>{
-      if(!item.classList.contains('item')) return;
-      if(!item.querySelector('.item-move-row')){
-        const row=document.createElement('div');
-        row.className='item-move-row';
-        row.innerHTML='<button type="button" class="item-move-btn move-up-btn" title="上移">↑ 上移</button><button type="button" class="item-move-btn move-down-btn" title="下移">↓ 下移</button>';
-        item.appendChild(row);
-      }
-    });
-    updateMoveButtonStates(tl);
+/* ────────── Reorder items within a day (clean modal, not inline clutter) ────────── */
+function bindReorderBtns(){
+  root.querySelectorAll('.manage-row').forEach(row=>{
+    if(row.querySelector('.reorder-day-btn')) return;
+    const btn=document.createElement('button');
+    btn.type='button'; btn.className='manage-btn reorder-day-btn';
+    btn.textContent='↕️ 調整順序';
+    btn.onclick=e=>{ e.preventDefault(); e.stopPropagation(); openReorderModal(row.closest('.day-body')); };
+    row.appendChild(btn);
   });
 }
-function updateMoveButtonStates(tl){
+function itemLabel(item){
+  const time=item.querySelector('.time');
+  const b=item.querySelector('b');
+  const t=time?time.textContent.trim():'';
+  const n=b?b.textContent.trim():'（未命名項目）';
+  return (t?`${t}｜`:'')+n;
+}
+function openReorderModal(dayBody){
+  const tl=dayBody && dayBody.querySelector('.timeline');
+  if(!tl) return;
+  openModal('調整這一天的順序','<div class="reorder-list" id="reorderList"></div><p class="small" style="margin-top:10px;color:var(--muted)">用上下箭頭調整順序，關閉視窗就會直接套用。</p>');
+  renderReorderList(tl);
+}
+function renderReorderList(tl){
+  const list=document.getElementById('reorderList');
+  if(!list) return;
   const items=[...tl.children].filter(el=>el.classList.contains('item'));
+  list.innerHTML='';
   items.forEach((item,i)=>{
-    const up=item.querySelector('.move-up-btn'), down=item.querySelector('.move-down-btn');
-    if(up) up.disabled = (i===0);
-    if(down) down.disabled = (i===items.length-1);
+    const row=document.createElement('div');
+    row.className='reorder-row';
+    row.innerHTML=`<span class="reorder-label">${esc(itemLabel(item))}</span>
+      <div class="reorder-btns">
+        <button type="button" class="reorder-btn r-up" ${i===0?'disabled':''}>↑</button>
+        <button type="button" class="reorder-btn r-down" ${i===items.length-1?'disabled':''}>↓</button>
+      </div>`;
+    row.querySelector('.r-up').onclick=()=>{ if(item.previousElementSibling) tl.insertBefore(item,item.previousElementSibling); renderReorderList(tl); debounceAutoSave(); };
+    row.querySelector('.r-down').onclick=()=>{ if(item.nextElementSibling) tl.insertBefore(item.nextElementSibling,item); renderReorderList(tl); debounceAutoSave(); };
+    list.appendChild(row);
   });
 }
-// event delegation so this keeps working even after items are added/removed/restored
-root.addEventListener('click', e=>{
-  const upBtn=e.target.closest('.move-up-btn');
-  const downBtn=e.target.closest('.move-down-btn');
-  if(!upBtn && !downBtn) return;
-  e.preventDefault(); e.stopPropagation();
-  const item=e.target.closest('.item');
-  const tl=item && item.closest('.timeline');
-  if(!item||!tl) return;
-  if(upBtn && item.previousElementSibling){
-    tl.insertBefore(item, item.previousElementSibling);
-  }else if(downBtn && item.nextElementSibling){
-    tl.insertBefore(item.nextElementSibling, item);
-  }
-  updateMoveButtonStates(tl);
-  debounceAutoSave();
-});
 
 function addCustomField(dayBody){
   openModal('新增景點／餐廳／備註',`
@@ -957,7 +985,7 @@ function addCustomField(dayBody){
     if(document.body.classList.contains('editing')){
       item.querySelectorAll('[data-editable]').forEach(el=>el.contentEditable='true')
     }
-    ensureMoveButtons();
+    bindReorderBtns();
     closeModal(); setEditing(true); showToast('已新增，記得按 💾 儲存')
   }
 }
@@ -1093,7 +1121,7 @@ function bindAll(){
   bindExpenses();
   bindChecklist();
   bindAddFieldBtns();
-  ensureMoveButtons();
+  bindReorderBtns();
   decorateLinks();
   // re-attach photo overlays
   root.querySelectorAll('.spot-photo-wrap').forEach(wrap=>{
