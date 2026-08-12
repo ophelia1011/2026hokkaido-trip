@@ -106,6 +106,10 @@ body.editing .check-del{display:block}
 .reorder-btn:disabled{opacity:.3;cursor:default}
 .item-delete-btn{display:none;margin-top:8px}
 body.editing .item-delete-btn{display:inline-flex}
+.item-move-row{display:none;gap:6px;margin-top:8px}
+body.editing .item-move-row{display:flex}
+.item-move-btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:850;cursor:pointer;color:var(--accent)}
+.item-move-btn:disabled{opacity:.3;cursor:default}
 .manage-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .manage-btn.danger{color:var(--danger);background:#fff4f1;border-color:#f5d0cc}
 
@@ -918,17 +922,7 @@ function bindAddFieldBtns(){
   })
 }
 
-/* ────────── Reorder items within a day (clean modal, not inline clutter) ────────── */
-function bindReorderBtns(){
-  root.querySelectorAll('.manage-row').forEach(row=>{
-    if(row.querySelector('.reorder-day-btn')) return;
-    const btn=document.createElement('button');
-    btn.type='button'; btn.className='manage-btn reorder-day-btn';
-    btn.textContent='↕️ 調整順序';
-    btn.onclick=e=>{ e.preventDefault(); e.stopPropagation(); openReorderModal(row.closest('.day-body')); };
-    row.appendChild(btn);
-  });
-}
+/* ────────── Reorder items within a day (simple always-visible up/down buttons) ────────── */
 function bindItemNavigation(){
   root.querySelectorAll('.timeline .item').forEach(item=>{
     let row=item.querySelector('.item-nav-row');
@@ -1035,28 +1029,33 @@ function itemLabel(item){
   const n=b?b.textContent.trim():'（未命名項目）';
   return (t?`${t}｜`:'')+n;
 }
-function openReorderModal(dayBody){
-  const tl=dayBody && dayBody.querySelector('.timeline');
-  if(!tl) return;
-  openModal('調整這一天的順序','<div class="reorder-list" id="reorderList"></div><p class="small" style="margin-top:10px;color:var(--muted)">用上下箭頭調整順序，關閉視窗就會直接套用。</p>');
-  renderReorderList(tl);
-}
-function renderReorderList(tl){
-  const list=document.getElementById('reorderList');
-  if(!list) return;
-  const items=[...tl.children].filter(el=>el.classList.contains('item'));
-  list.innerHTML='';
-  items.forEach((item,i)=>{
-    const row=document.createElement('div');
-    row.className='reorder-row';
-    row.innerHTML=`<span class="reorder-label">${esc(itemLabel(item))}</span>
-      <div class="reorder-btns">
-        <button type="button" class="reorder-btn r-up" ${i===0?'disabled':''}>↑</button>
-        <button type="button" class="reorder-btn r-down" ${i===items.length-1?'disabled':''}>↓</button>
-      </div>`;
-    row.querySelector('.r-up').onclick=()=>{ if(item.previousElementSibling) tl.insertBefore(item,item.previousElementSibling); renderReorderList(tl); debounceAutoSave(); };
-    row.querySelector('.r-down').onclick=()=>{ if(item.nextElementSibling) tl.insertBefore(item.nextElementSibling,item); renderReorderList(tl); debounceAutoSave(); };
-    list.appendChild(row);
+function bindReorderBtns(){
+  // remove the old "調整順序" summary button if present from an earlier version
+  root.querySelectorAll('.reorder-day-btn').forEach(b=>b.remove());
+  root.querySelectorAll('.timeline').forEach(tl=>{
+    const items=[...tl.children].filter(el=>el.classList.contains('item'));
+    items.forEach((item,i)=>{
+      let row=item.querySelector(':scope > .item-move-row');
+      if(!row){
+        row=document.createElement('div');
+        row.className='item-move-row';
+        row.innerHTML='<button type="button" class="item-move-btn move-up-btn">↑ 上移</button><button type="button" class="item-move-btn move-down-btn">↓ 下移</button>';
+        item.appendChild(row);
+      }
+      const up=row.querySelector('.move-up-btn'), down=row.querySelector('.move-down-btn');
+      up.disabled = (i===0);
+      down.disabled = (i===items.length-1);
+      up.onclick=e=>{
+        e.preventDefault(); e.stopPropagation();
+        if(item.previousElementSibling) tl.insertBefore(item, item.previousElementSibling);
+        bindReorderBtns(); debounceAutoSave();
+      };
+      down.onclick=e=>{
+        e.preventDefault(); e.stopPropagation();
+        if(item.nextElementSibling) tl.insertBefore(item.nextElementSibling, item);
+        bindReorderBtns(); debounceAutoSave();
+      };
+    });
   });
 }
 
